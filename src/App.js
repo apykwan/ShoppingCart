@@ -3,23 +3,29 @@ import React from 'react';
 import data from "./data.json";
 import Products from './components/Products';
 import Filter from './components/Filter';
+import Cart from './components/Cart';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       products: data.products,
+      cartItems: [],
       size: "",
       sort: ""
     };
     this.filterProducts = this.filterProducts.bind(this);
     this.sortProducts = this.sortProducts.bind(this);
+    this.addToCart = this.addToCart.bind(this);
   };
+  
   sortProducts(event) {
     const sort = event.target.value;
     this.setState(state => ({
       sort,
-      products: state.products.sort((a, b) => (
+      products: state.products
+      .slice()
+      .sort((a, b) => (
         sort === "lowest" 
           ? ((a.price > b.price) ? 1 : -1)
           : sort === "highest"
@@ -28,6 +34,7 @@ class App extends React.Component {
       ))
     }))
   };
+
   filterProducts(event) {
     if (event.target.value === "") {
       this.setState({ 
@@ -43,6 +50,41 @@ class App extends React.Component {
     };
   };
 
+  addToCart = (product) => {
+    const cartItems = this.state.cartItems.slice();
+    let alreadyInCart = false;
+    cartItems.forEach((item) => {
+      if (item._id === product._id) {
+        item.count++;
+        alreadyInCart = true;
+      }
+    });
+    if (!alreadyInCart) {
+      cartItems.push({ ...product, count: 1 });
+    }
+    this.setState({ cartItems });
+  };
+
+  removeFromCart = product => {
+    let updatedCartItems;
+    if (product.count === 1) {
+      updatedCartItems = this.state.cartItems.filter(item => item._id !== product._id);
+    } else {
+      updatedCartItems = this.state.cartItems.map(item => {
+        if (item._id === product._id) {
+          item.count = item.count - 1;
+          return {
+            ...item,
+            ...item.count
+          }
+        } else {
+          return item;
+        }
+      })
+    };
+
+    this.setState({ cartItems: updatedCartItems });
+  }
   render() {
     return (
       <div className="grid-container">
@@ -51,18 +93,24 @@ class App extends React.Component {
         </header>
         <main>
           <div className="content">
-            <div className="name">
-              <Filter 
+            <div className="main">
+              <Filter
                 count={this.state.products.length}
                 size={this.state.size}
                 sort={this.state.sort}
                 filterProducts={this.filterProducts}
                 sortProducts={this.sortProducts}
-              />
-              <Products products={this.state.products} />
+              ></Filter>
+              <Products
+                products={this.state.products}
+                addToCart={this.addToCart}
+              ></Products>
             </div>
             <div className="sidebar">
-              Cart Items
+              <Cart
+                cartItems={this.state.cartItems}
+                removeFromCart={this.removeFromCart}
+              />
             </div>
           </div>
         </main>
