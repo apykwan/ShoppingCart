@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 import Modal from 'react-modal';
+import { connect } from 'react-redux';
 
+import { fetchProducts } from '../actions/productActions';
 import formatCurrency from "../util";
 
-export default class Products extends Component {
+class Products extends Component {
     constructor(props) {
         super(props);
         this.state = {
             product: null,
         };
+    };
+
+    componentDidMount() {
+        this.props.fetchProducts();
     };
 
     openModal = product => {
@@ -19,84 +25,106 @@ export default class Products extends Component {
 
     closeModal = () => {
         this.setState({ product: null });
-    }
-
+    };
+    
     render() {
         const { product } = this.state;
         return (
             <div>
                 <Fade bottom cascade={true}>
-                    <ul className="products">
-                        {this.props.products.map((product) => (
-                            <li key={product._id}>
-                                <div className="product">
-                                    <a 
-                                        href={"#" + product._id} 
-                                        onClick={this.openModal.bind(this, product)}
-                                    >
-                                        <img src={product.image} alt={product.title}></img>
-                                        <p>{product.title}</p>
-                                    </a>
+                    {!this.props.products
+                        ? <div>Loading...</div>
+                        : (
+                            <ul className="products">
+                                {this.props.products.map((product) => (
+                                    <li key={product._id}>
+                                        <div className="product">
+                                            <a
+                                                href={"#" + product._id}
+                                                onClick={this.openModal.bind(this, product)}
+                                            >
+                                                <img src={product.image} alt={product.title}></img>
+                                                <p>{product.title}</p>
+                                            </a>
+                                            <div className="product-price">
+                                                <div>{formatCurrency(product.price)}</div>
+                                                <button
+                                                    className="button primary"
+                                                    onClick={this.props.addToCart.bind(this, product)}
+                                                >
+                                                    Add To Cart
+                                                    </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )} 
+                </Fade>
+                {product && (
+                    <Modal
+                        isOpen={true}
+                        onRequestClose={this.closeModal}
+                    >
+                        <Zoom>
+                            <button
+                                className="close-modal"
+                                onClick={this.closeModal.bind(this)}
+                            >
+                                X
+                                </button>
+                            <div className="product-details">
+                                <img src={product.image} alt={product.detail} />
+                                <div className="product-details-description">
+                                    <p><strong>{product.title}</strong></p>
+                                    <p><strong>{product.description}</strong></p>
+                                    <p>
+                                        Avaiable Sizes: {" "}
+                                        {product.availableSizes.map(x => (
+                                            <span>
+                                                {" "}
+                                                <button className="button">{x}</button>
+                                            </span>
+                                        ))}
+                                    </p>
                                     <div className="product-price">
                                         <div>{formatCurrency(product.price)}</div>
                                         <button
                                             className="button primary"
-                                            onClick={this.props.addToCart.bind(this, product)}
+                                            onClick={() => {
+                                                this.props.addToCart(product);
+                                                this.closeModal();
+                                            }}
                                         >
-                                            Add To Cart
-                                    </button>
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </Fade>
-                {
-                    product && (
-                        <Modal
-                            isOpen={true}
-                            onRequestClose={this.closeModal}
-                        >
-                            <Zoom>
-                                <button
-                                    className="close-modal" 
-                                    onClick={this.closeModal.bind(this)}
-                                >
-                                    X
-                                </button>
-                                <div className="product-details">
-                                    <img src={product.image} alt={product.detail} />
-                                    <div className="product-details-description">
-                                        <p><strong>{product.title}</strong></p>
-                                        <p><strong>{product.description}</strong></p>
-                                        <p>
-                                            Avaiable Sizes: {" "}
-                                            {product.availableSizes.map(x => (
-                                                <span>
-                                                    {" "}
-                                                    <button className="button">{x}</button>
-                                                </span>
-                                            ))}
-                                        </p>
-                                        <div className="product-price">
-                                            <div>{formatCurrency(product.price)}</div>
-                                            <button
-                                                className="button primary"
-                                                onClick={() => {
-                                                    this.props.addToCart(product);
-                                                    this.closeModal();
-                                                }}
-                                            >
-                                                Add to Cart
+                                            Add to Cart
                                         </button>
-                                        </div>
                                     </div>
                                 </div>
-                            </Zoom>
-                        </Modal>
-                    )
-                }
+                            </div>
+                        </Zoom>
+                    </Modal>
+                )}
             </div>
         );
     }
-}
+};
+
+// const mapPropsToState = state => {
+//     return {
+//         products: state.products.items
+//     }
+// };
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         fetchProducts
+//     }
+// };
+
+// export default connect(mapPropsToState, mapDispatchToProps)(Products);
+
+export default connect(state => ({
+    products: state.products.items
+}), {
+    fetchProducts
+})(Products)
