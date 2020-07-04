@@ -72,7 +72,7 @@ export default class Cart extends Component {
                                     <div className="total">
                                         <div>
                                             Total:
-                            {formatCurrency(cartItems.reduce((a, c) => a + c.price * c.count, 0))}
+                                            {formatCurrency(cartItems.reduce((a, c) => a + c.price * c.count, 0))}
                                         </div>
                                         <button
                                             className="button primary"
@@ -89,7 +89,7 @@ export default class Cart extends Component {
                                                 <form onsubmit={this.createOrder}>
                                                     <ul className="form-container">
                                                         <li>
-                                                            <lable>Name</lable>
+                                                            <label>Name</label>
                                                             <input
                                                                 name="name"
                                                                 type="text"
@@ -99,7 +99,7 @@ export default class Cart extends Component {
                                                             />
                                                         </li>
                                                         <li>
-                                                            <lable>Address</lable>
+                                                            <label>Address</label>
                                                             <input
                                                                 name="address"
                                                                 type="text"
@@ -109,7 +109,7 @@ export default class Cart extends Component {
                                                             />
                                                         </li>
                                                         <li>
-                                                            <lable>Email</lable>
+                                                            <label>Email</label>
                                                             <input
                                                                 name="email"
                                                                 type="email"
