@@ -1,5 +1,9 @@
-import { FETCH_PRODUCTS } from "../types";
-import { FILTER_PRODUCTS_BY_SIZE, ORDER_PRODUCTS_BY_PRICE } from "../types";
+import {
+    FETCH_PRODUCTS,
+    FILTER_PRODUCTS_BY_SIZE,
+    ORDER_PRODUCTS_BY_PRICE,
+} from "../types";
+
 export const fetchProducts = () => async (dispatch) => {
     const res = await fetch("/api/products");
     const data = await res.json();
@@ -22,6 +26,7 @@ export const filterProducts = (products, size) => (dispatch) => {
         },
     });
 };
+
 export const sortProducts = (filteredProducts, sort) => (dispatch) => {
     const sortedProducts = filteredProducts.slice();
     if (sort === "latest") {
