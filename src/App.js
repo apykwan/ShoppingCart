@@ -1,27 +1,84 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-// import data from "./data.json";
 import Products from './components/Products';
 import Filter from './components/Filter';
 import Cart from './components/Cart';
 import store from './store';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cartItems: localStorage.getItem("cartItems") 
-        ? JSON.parse(localStorage.getItem("cartItems")) 
-        : []
-    };
-    // this.filterProducts = this.filterProducts.bind(this);
-    // this.sortProducts = this.sortProducts.bind(this);
-    this.addToCart = this.addToCart.bind(this);
-    this.removeFromCart = this.removeFromCart.bind(this);
-  };
-  
-  // sortProducts(event) {
+  render() {
+    return (
+      <Provider store={store}>
+        <div className="grid-container">
+          <header>
+            <a href="/">React Shopping Cart</a>
+          </header>
+          <main>
+            <div className="content">
+              <div className="main">
+                <Filter />
+                <Products />
+              </div>
+              <div className="sidebar">
+                <Cart />
+              </div>
+            </div>
+          </main>
+          <footer>
+            All right is reserved.
+          </footer>
+        </div>
+      </Provider>  
+    );
+  }
+};
+
+export default App;
+
+// addToCart = (product) => {
+//   const cartItems = this.state.cartItems.slice();
+//   let alreadyInCart = false;
+//   cartItems.forEach((item) => {
+//     if (item._id === product._id) {
+//       item.count++;
+//       alreadyInCart = true;
+//     }
+//   });
+//   if (!alreadyInCart) {
+//     cartItems.push({ ...product, count: 1 });
+//   }
+//   this.setState({ cartItems });
+//   localStorage.setItem('cartItems', JSON.stringify(cartItems));
+// };
+
+// createOrder = order => {
+//   alert('need to save order for' + order.name);
+// };
+
+// removeFromCart = product => {
+//   let updatedCartItems;
+//   if (product.count === 1) {
+//     updatedCartItems = this.state.cartItems.filter(item => item._id !== product._id);
+//   } else {
+//     updatedCartItems = this.state.cartItems.map(item => {
+//       if (item._id === product._id) {
+//         item.count = item.count - 1;
+//         return {
+//           ...item,
+//           ...item.count
+//         }
+//       } else {
+//         return item;
+//       }
+//     })
+//   };
+
+//   this.setState({ cartItems: updatedCartItems });
+//   localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+// };
+
+ // sortProducts(event) {
   //   const sort = event.target.value;
   //   this.setState(state => ({
   //     sort,
@@ -51,78 +108,3 @@ class App extends React.Component {
   //     });
   //   };
   // };
-
-  addToCart = (product) => {
-    const cartItems = this.state.cartItems.slice();
-    let alreadyInCart = false;
-    cartItems.forEach((item) => {
-      if (item._id === product._id) {
-        item.count++;
-        alreadyInCart = true;
-      }
-    });
-    if (!alreadyInCart) {
-      cartItems.push({ ...product, count: 1 });
-    }
-    this.setState({ cartItems });
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  };
-
-  createOrder = order => {
-    alert('need to save order for' + order.name);
-  };
-
-  removeFromCart = product => {
-    let updatedCartItems;
-    if (product.count === 1) {
-      updatedCartItems = this.state.cartItems.filter(item => item._id !== product._id);
-    } else {
-      updatedCartItems = this.state.cartItems.map(item => {
-        if (item._id === product._id) {
-          item.count = item.count - 1;
-          return {
-            ...item,
-            ...item.count
-          }
-        } else {
-          return item;
-        }
-      })
-    };
-
-    this.setState({ cartItems: updatedCartItems });
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
-  };
-
-  render() {
-    return (
-      <Provider store={store}>
-        <div className="grid-container">
-          <header>
-            <a href="/">React Shopping Cart</a>
-          </header>
-          <main>
-            <div className="content">
-              <div className="main">
-                <Filter />
-                <Products addToCart={this.addToCart} />
-              </div>
-              <div className="sidebar">
-                <Cart
-                  createOrder={this.createOrder}
-                  cartItems={this.state.cartItems}
-                  removeFromCart={this.removeFromCart}
-                />
-              </div>
-            </div>
-          </main>
-          <footer>
-            All right is reserved.
-          </footer>
-        </div>
-      </Provider>  
-    );
-  }
-};
-
-export default App;
