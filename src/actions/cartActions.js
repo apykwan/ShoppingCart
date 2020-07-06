@@ -21,11 +21,12 @@ export const addToCart = product => (dispatch, getState) => {
 };
 
 export const removeFromCart = product => (dispatch, getState) => {
-    let updatedCartItems;
+    const updatedCartItems = getState().cart.cartItems.slice();
+    let cartItems;
     if (product.count === 1) {
-        updatedCartItems = getState().cart.cartItems.slice().filter(item => item._id !== product._id);
+        cartItems = updatedCartItems.filter(item => item._id !== product._id);
     } else {
-        updatedCartItems = getState().cart.cartItems.slice().map(item => {
+        cartItems = updatedCartItems.map(item => {
             if (item._id === product._id) {
                 item.count = item.count - 1;
                 return {
@@ -35,13 +36,13 @@ export const removeFromCart = product => (dispatch, getState) => {
             } else {
                 return item;
             }
-        })
+        });
     };
     // const cartItems = getState().cart.cartItems.slice().filter(item => item._id !== product._id);
     
     dispatch({
         type: REMOVE_FROM_CART,
-        payload: { cartItems: updatedCartItems }
+        payload: { cartItems }
     });
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
 };
