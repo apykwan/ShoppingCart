@@ -73,7 +73,7 @@ class Products extends Component {
                                 onClick={this.closeModal.bind(this)}
                             >
                                 X
-                                </button>
+                            </button>
                             <div className="product-details">
                                 <img src={product.image} alt={product.detail} />
                                 <div className="product-details-description">

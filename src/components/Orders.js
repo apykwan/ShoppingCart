@@ -9,6 +9,7 @@ class Orders extends Component {
         this.props.fetchOrders();
     };
     render() {
+        console.log(window.location.href);
         const { orders } = this.props;
         return (
             !orders
