@@ -43,13 +43,20 @@ header {
   justify-content: space-between;
   padding: 0.5rem;
 }
+
 header a {
   color: #ffffff;
   text-decoration: none;
 }
+
 main {
   grid-area: main;
 }
+
+.header-admin a {
+  margin-left: 1.6rem;
+}
+
 footer {
   grid-area: footer;
   background-color: #203040;
@@ -97,7 +104,7 @@ footer {
   
 }
 
-.product img {
+.product-image {
   max-width: 37rem;
   max-height: 37rem;
 }
@@ -286,4 +293,10 @@ td {
 
 th {
   text-align: left;
+}
+
+/* Stock */
+.stock-form {
+  width: 50vw;
+  margin: auto;
 }

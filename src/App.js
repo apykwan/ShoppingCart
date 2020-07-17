@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 
 import AdminScreen from './screens/AdminScreen';
 import HomeScreen from './screens/HomeScreen';
-import store from './store';
+import StockScreen from './screens/StockScreen';
+import store from './store/store';
 
 class App extends React.Component {
   render() {
@@ -14,10 +15,14 @@ class App extends React.Component {
           <div className="grid-container">
             <header>
               <Link to="/">React Shopping Cart</Link>
-              <Link to="/admin">Admin</Link>
+              <div className="header-admin">
+                <Link to="/stock">Create Product</Link>
+                <Link to="/admin">Admin</Link>
+              </div>
             </header>
             <main>
               <Route path="/admin" component={AdminScreen} />
+              <Route path="/stock" component={StockScreen} /> 
               <Route path="/" component={HomeScreen} exact />
             </main>
             <footer>

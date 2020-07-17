@@ -1,5 +1,6 @@
 import {
     FETCH_PRODUCTS,
+    CREATE_PRODUCT,
     FILTER_PRODUCTS_BY_SIZE,
     ORDER_PRODUCTS_BY_PRICE,
 } from "../types";
@@ -13,6 +14,23 @@ export const fetchProducts = () => async (dispatch) => {
         payload: data,
     });
 };
+
+export const createProduct = product => dispatch => {
+    fetch("/api/products", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            dispatch({ 
+                type: CREATE_PRODUCT, 
+                payload: data 
+            });
+        });
+}
 
 export const filterProducts = (products, size) => (dispatch) => {
     dispatch({

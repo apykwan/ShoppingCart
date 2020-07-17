@@ -1,11 +1,17 @@
 import {
     FETCH_PRODUCTS,
+    CREATE_PRODUCT,
     FILTER_PRODUCTS_BY_SIZE,
     ORDER_PRODUCTS_BY_PRICE,
 } from "../types";
 
 export const productsReducer = (state = {}, action) => {
     switch (action.type) {
+        case CREATE_PRODUCT: 
+            return {
+                ...state,
+                items: action.payload
+            }
         case FILTER_PRODUCTS_BY_SIZE:
             return {
                 ...state,
@@ -19,7 +25,10 @@ export const productsReducer = (state = {}, action) => {
                 filteredItems: action.payload.items,
             };
         case FETCH_PRODUCTS:
-            return { items: action.payload, filteredItems: action.payload };
+            return { 
+                items: action.payload, 
+                filteredItems: action.payload 
+            };
         default:
             return state;
     }

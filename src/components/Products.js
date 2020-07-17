@@ -4,9 +4,9 @@ import Zoom from 'react-reveal/Zoom';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
 
-import { fetchProducts } from '../actions/productActions';
-import { addToCart } from '../actions/cartActions';
-import formatCurrency from "../util";
+import { fetchProducts } from '../store/actions/productActions';
+import { addToCart } from '../store/actions/cartActions';
+import formatCurrency from "../utils/util";
 
 class Products extends Component {
     constructor(props) {
@@ -44,17 +44,26 @@ class Products extends Component {
                                                 href={"#" + product._id}
                                                 onClick={this.openModal.bind(this, product)}
                                             >
-                                                <img src={product.image} alt={product.title}></img>
+                                                <img
+                                                    className="product-image" 
+                                                    src={product.image} 
+                                                    alt={product.title} 
+                                                />
                                                 <p>{product.title}</p>
                                             </a>
                                             <div className="product-price">
                                                 <div>{formatCurrency(product.price)}</div>
-                                                <button
-                                                    className="button primary"
-                                                    onClick={this.props.addToCart.bind(this, product)}
-                                                >
-                                                    Add To Cart
-                                                    </button>
+                                                { product.stock > 0 
+                                                    ? (<button
+                                                        className="button primary"
+                                                        onClick={this.props.addToCart.bind(this, product)}
+                                                    >
+                                                        Add To Cart
+                                                    </button>)
+                                                    : (<button className="button">
+                                                        SOLD OUT !!!
+                                                    </button>)
+                                                }
                                             </div>
                                         </div>
                                     </li>
@@ -90,15 +99,21 @@ class Products extends Component {
                                     </p>
                                     <div className="product-price">
                                         <div>{formatCurrency(product.price)}</div>
-                                        <button
-                                            className="button primary"
-                                            onClick={() => {
-                                                this.props.addToCart(product);
-                                                this.closeModal();
-                                            }}
-                                        >
-                                            Add to Cart
-                                        </button>
+                                       
+                                        {product.stock > 0
+                                            ? (<button
+                                                className="button primary"
+                                                onClick={() => {
+                                                    this.props.addToCart(product);
+                                                    this.closeModal();
+                                                }}
+                                            >
+                                                Add To Cart
+                                            </button>)
+                                            : (<button className="button">
+                                                SOLD OUT !!!
+                                            </button>)
+                                        }
                                     </div>
                                 </div>
                             </div>

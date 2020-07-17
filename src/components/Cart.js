@@ -5,9 +5,9 @@ import Modal from "react-modal";
 import Fade from 'react-reveal/Fade';
 import Zoom from 'react-reveal/Zoom';
 
-import { removeFromCart } from '../actions/cartActions';
-import { createOrder, clearOrder } from '../actions/orderActions';
-import formatCurrency from '../util';
+import { removeFromCart } from '../store/actions/cartActions';
+import { createOrder, clearOrder } from '../store/actions/orderActions';
+import formatCurrency from "../utils/util";
 
 class Cart extends Component {
     constructor (props) {
@@ -192,7 +192,6 @@ class Cart extends Component {
                                                 </form>
                                             </div>
                                         </Fade>
-                                        
                                     )}
                             </div>
                         )}

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 
-import { fetchOrders } from '../actions/orderActions';
-import formatCurrency from "../util";
+import { fetchOrders } from '../store/actions/orderActions';
+import formatCurrency from "../utils/util";
 
 class Orders extends Component {
     componentDidMount() {
         this.props.fetchOrders();
     };
     render() {
-        console.log(window.location.href);
         const { orders } = this.props;
         return (
             !orders
